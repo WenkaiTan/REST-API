@@ -1,0 +1,20 @@
+{
+  "name": "restapi",
+  "version": "1.0.0",
+  "description": "Rest Api Tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "1"
+  },
+  "keywords": [
+    "RESTAPI"
+  ],
+  "author": "Wenkai Tan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.1",
+    "nodemon": "^2.0.2"
+  }
+}

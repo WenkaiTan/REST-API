@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WenkaiGo</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="title">WenkaiGo Rest API</h1>
+    <div id="homepage">
+        <h1>Hire a Wenkai in your area</h1>
+        <div id="wenkais"></div>
+    </div>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+    class Wenkai extends React.Component {
+        constructor(props){
+            super(props);
+            this.onChange=this.onChange.bind(this);
+            this.handleSubmit=this.handleSubmit.bind(this);
+            this.state = {
+                lng: null,
+                lat: null,
+                wenkais:[]
+            }
+        }
+        onChange(e){
+            this.setState({
+                [e.target.name]: e.target.value
+            })
+        }
+        handleSubmit(event){
+            event.preventDefault();
+            var lng = this.state.lng;
+            var lat = this.state.lat;
+
+            fetch('/api/wenkai?lng='+lng+'&lat='+lat)
+            .then(data => data.json())
+            .then(json=>{
+                this.setState({
+                    wenkais: json
+                });
+                console.log(json);
+            })
+
+        }
+        render(){
+            var wenkais = this.state.wenkais;
+            var x = [wenkais].map(function(wenkai, index){
+                    return(
+                        <li key={index}>
+                            <span className={wenkai.available}></span>
+                            <span className="name">{wenkai.name}</span>
+                            <span className="rank">{wenkai.rank}</span>
+                            <span className="dist">{Math.floor(wenkai.dist / 1000)} km</span>
+                        </li>
+                    );
+                });
+            return(
+                <div id="wenkais-container">
+                    <form id='search' onSubmit={this.handleSubmit}>
+                        <label htmlFor="lng">Longitude:</label>
+                        <input type="text" name="lng" onChange={this.onChange}/>
+                        <label htmlFor="lat">Lattitude:</label>
+                        <input type="text" name="lat" onChange={this.onChange} />
+                        <input type="submit" value="Enter" />
+                    </form>   
+                    <ul>{x}</ul> 
+                </div>
+
+            )
+        }
+
+
+    }
+    ReactDOM.render(<Wenkai />, document.getElementById('wenkais'))
+    </script>
+</body>
+</html>
